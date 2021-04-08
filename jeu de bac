@@ -1,0 +1,190 @@
+#include <iostream>
+#include<fstream>
+#include<cstdlib>
+#include<ctime>
+using namespace std;
+
+class game 
+{ private
+
+string * categorie;
+char alphabet;
+int score;
+public
+game (int s=0):score(s)
+{
+categorie =new string[6];
+const char l[]='ABCDEFGHIJKLMNLOPQRSTUVWXYZ'
+size_t i;// unsigned integer type used for array indexing
+  srand(time(NULL));
+ //La fonction srand initialise le générateur de nombres pseudo-aléatoire
+    i = rand() % (25 + 1);
+    alphabet= l[i];
+
+}
+~game()
+{delete []categorie;}
+int  calcul_score(string mot) //fonction amie a player
+{ 
+  if mot==categorie[i]
+		score++;
+		return score;}
+char get_alphabet ()
+{ return alphabet ;}
+}
+
+
+class player {
+		private
+		string pseudoname;
+		// int * score ; pour le calcul du meilleur score
+		string theme ; //theme choisi par le joueur
+		public 
+		player ()
+		{
+            cout<<"Avant de commencer "<<endl;
+			cout<< "  Entrez votre pseudo nom " << endl;
+			cin >> pseudoname ;
+			cout << "Choisir votre theme preferé : /n nature /n sport /n movies /n cuisine /n géneral /n langue /n  " << endl ;
+			cin >> theme ; 
+		}
+		~player();
+		string get_theme ()
+		{ return theme ;}
+		bool  verif(char c,string a,string b)
+        {   
+         string mot;
+         int ok=0;
+         int k=0;
+        if (c=L)
+           { ifstream dict(b , ios::in);
+             if(!dict)
+              {
+                cout<<"ouverture impossible"<<endl;
+              }
+            else
+              {
+                while (dict>> mot)
+                  calcul_score(mot);
+                  dict.close();
+              }
+              }
+        friend  int  calcul_score(string mot);
+};
+int main { //without sfml
+        cout << "BIENVENUE AU JEU DE BACCALAUREAT"<<endl;
+        cout<< "Voici les regles de jeu:"<<endl;
+        cout<< "Une lettre sera choisis au hazard"<<endl;
+        cout<<"Vous pouvez ensuite choisir un theme "<<endl;
+        cout<<"Vous devez ensuite trouver les cinq mots relié au theme"
+        chout<<"BONNE CHANCE !"
+		player player();
+		string theme;
+		string * categorie;
+		string * reponse;
+		categorie=new string[6];
+		reponse =new string [6]
+		theme=get_theme();
+		if theme="sport"
+			{ categorie[0]="type de sport";
+			   categorie[1]="nom de joeur";
+			   categorie[2]="nom d'equipe"
+			   categorie[3]="nom de competition";
+			   categorie[4]="nom d'un entraineur";}
+        if theme="nature"
+			{ categorie[0]="nom d'animal";
+			   categorie[1]="nom d'un fruit";
+			   categorie[2]="nom de légume"
+			   categorie[3]="nom de pays";
+			   categorie[4]="nom d'un objet";}
+		else if theme="movies"
+		    { categorie[0]="nom d acteur"
+               categorie[1]="nom de film"
+               categorie[2]="nom de serie"
+               categorie[3]="nom d'une actrice"
+               categorie[4]="nom d'un prix"		
+               }
+        else if theme="cuisine"
+			{ categorie[0]="nom d'aliment";
+			   categorie[1]="nom de plat";
+			   categorie[2]="nom de fruit"
+			   categorie[3]=" nom de legumes";
+			   categorie[4]="nom d'un dessert";}
+        else if theme="géneral"
+			{ categorie[0]="nom d'un metier";
+			   categorie[1]="personne célébre ";
+			   categorie[2]="nom de voiture"
+			   categorie[3]="objet";
+			   categorie[4]="marque";}
+        else if theme="langue"
+			{ categorie[0]="verbe";
+			   categorie[1]="adjectif";
+			   categorie[2]="adverbe"
+			   categorie[3]="prenom";
+			   categorie[4]="nom";}      
+		
+		game game (*categorie);
+		char c;
+		c=get_alphabet();
+		cout<<c<<endl;
+		for (int i=0;i<5;i++)
+		{ cout<<categorie[i]<<endl;
+		   cin >>reponse[i];
+		}
+	
+		/*for (int j=0;j)
+		
+		sf::Renderwindow window (sf::VideoMode(800,600),"jeu du bac",sf::style::Titlebar|sf::style::close|sf::style::Resize);
+		sf Event ev ; 
+		//game loop
+		while (window.isOpen())
+		{sf::Text text;
+
+// choix de la police à utiliser
+text.setFont(font); // font est un sf::Font
+
+// choix de la chaîne de caractères à afficher
+text.setString("nouvelle partie");
+
+// choix de la taille des caractères
+text.setCharacterSize(24); // exprimée en pixels, pas en points !
+
+// choix de la couleur du texte
+text.setFillColor(sf::Color::Black);
+
+// choix du style du texte
+text.setStyle(sf::Text::Bold );
+
+...
+
+// puis, dans la boucle de dessin, entre window.clear() et window.display()
+window.draw(text);
+			//event 
+			while (Window.pollEvent(ev))
+			{
+		    	switch (event.type)
+    				{
+      					  // fenêtre fermée
+     					   case sf::Event::Closed:
+          					  window.close();
+          					  break;
+
+      				  // touche pressée
+       				 case sf::Event::KeyPressed:
+    					        ...
+         					   break;
+
+        			// on ne traite pas les autres types d'évènements
+     			   default:
+       					    break ;
+    }}
+    window.clear(sf::Color::Black);
+
+        // c'est ici qu'on dessine tout
+        // window.draw(...);
+
+        // fin de la frame courante, affichage de tout ce qu'on a dessiné
+        window.display();
+    } */
+    
+
