@@ -3,39 +3,33 @@
 #include<cstdlib>
 #include<ctime>
 #include<string>
+#include<vector>
+#include<map>
+#include<algorithm>
+
+
 using namespace std;
 
-class game
-  { private :
 
-        string * categorie;
-        char alphabet;
-        int score;
+class player {
+private :
+            string pseudoname;
+            int score;
 
-    public :
-        game ( string* categorie, char C='A',int s=0): alphabet(C), score(s)
-                {
+            //vector<string> noms;
+            //int nbjoueur;
+            // int * score ; pour le calcul du meilleur score
 
+public :
+            player (int s=0):score(s)
+                    {
 
+                            cout<<"Avant de commencer "<<endl;
+                            cout<< "  Entrez votre pseudo nom " << endl;
+                            cin >> pseudoname ;
 
-
-                            srand(time(NULL));
-                            //La fonction srand initialise le générateur de nombres pseudo-aléatoire
-
-                            alphabet= rand() % (90-65+1) + 65;
-
-                }
-        ~game()
-                            {delete []categorie;}
-
-        int  calcul_score(string a,string b)
-                {
-                            if (a==b)
-                              {score++;};
-                            return (score);}
-        char get_alphabet  ()
-                { return alphabet ;}
-        bool  verif(char c,string a,string b)
+                    }
+                    void  verif(char c,string a,string b)
         {
                 string mot;
                 if (c==a[0])
@@ -51,99 +45,96 @@ class game
                                     dict.close();
                                 }
                         } }
-        int get_score() const
+
+           int  calcul_score(string a,string b)
+
+                {
+                            if (a==b)
+                              {score++;};
+                            return (score);}
+            int get_score() const
                 { return score;}
-
-                  } ;
-
-
-class player {
-private :
-            string pseudoname;
-            // int * score ; pour le calcul du meilleur score
-            string theme ; //theme choisi par le joueur
-public :
-            player ()
-                    {
-                            cout<<"Avant de commencer "<<endl;
-                            cout<< "  Entrez votre pseudo nom " << endl;
-                            cin >> pseudoname ;
-                            cout << "Choisir votre theme preferé : /n nature /n sport /n movies /n cuisine /n géneral /n langue /n  " << endl ;
-                            cin >> theme ;
-                    }
-             string get_theme()
-                            { return theme ;}
-
+            string get_nom (){return pseudoname;}
             ~player(){}
 
         };
 int main() {
-player player1;
+int n;
+char alphabet;
+map<string,int> j;
 string theme;
+cout<<"entrer nombre de joueurs"<<endl;
+cin>>n;
+cout << "Choisir votre theme preferé : /n nature /n sport /n movies /n cuisine /n géneral /n langue /n  " << endl ;
+cin >> theme ;
 string * categorie;
 string * reponse;
 categorie=new string[5];
 reponse =new string [5] ;
-theme=player1.get_theme();
 if (theme=="sport")
 { categorie[0]="type de sport";
   categorie[1]="nom de joeur";
   categorie[2]="nom d'equipe" ;
   categorie[3]="nom de competition";
   categorie[4]="nom d'un entraineur";} ;
-  if (theme=="nature")
+if (theme=="nature")
 { categorie[0]="nom d'animal";
   categorie[1]="nom d'un fruit";
   categorie[2]="nom de légume" ;
   categorie[3]="nom de pays";
   categorie[4]="nom d'un objet";}
-if (theme=="movies")
+else if (theme=="movies")
    { categorie[0]="nom d acteur" ;
      categorie[1]="nom de film" ;
      categorie[2]="nom de serie" ;
      categorie[3]="nom d'une actrice";
      categorie[4]="nom d'un prix";
                }
-if (theme=="cuisine")
+else if (theme=="cuisine")
 { categorie[0]="nom d'aliment";
   categorie[1]="nom de plat";
   categorie[2]="nom de fruit" ;
   categorie[3]=" nom de legumes";
   categorie[4]="nom d'un dessert";}
-if (theme=="géneral")
+else if (theme=="géneral")
 { categorie[0]="nom d'un metier";
   categorie[1]="personne célébre ";
   categorie[2]="nom de voiture" ;
   categorie[3]="objet";
   categorie[4]="marque";}
-if (theme=="langue")
+else if (theme=="langue")
 { categorie[0]="verbe";
   categorie[1]="adjectif";
   categorie[2]="adverbe" ;
   categorie[3]="prenom";
   categorie[4]="nom";};
 
-game game (categorie);
-char c;
-c=game.get_alphabet();
-cout<<c<<endl;
-for (int i=0;i<5;i++)
-{ cout<<categorie[i]<<endl;
-  cin >>reponse[i];
-} ;
+srand(time(NULL)); //La fonction srand initialise le générateur de nombres pseudo-aléatoire
+alphabet= rand() % (90-65+1) + 65;
+cout<<"la lettre choisie est "<<alphabet<<endl;
 
-if (theme=="sport")
+for (int i=0;i<n;i++)
 {
+    player player1;
 
-    for(int i=0;i<5;i++)
-                    {game.verif(c,reponse[i],"sport.txt");}; //pour chaque categorie on aura un fichier
+    for (int i=0;i<5;i++)
+        {   cout<<categorie[i]<<endl;
+            cin >>reponse[i];
+        } ;
+    if (theme=="sport")
+        {
 
+            for(int i=0;i<5;i++)
+                {player1.verif(alphabet,reponse[i],"sport.txt");}; //pour chaque categorie on aura un fichier
+
+        }
+    cout<<player1.get_score()<<endl;
+
+    j[player1.get_nom()]=player1.get_score();
 }
-
-
-int s=game.get_score();
-cout<<s<<endl;
-
+map<string,int>::iterator best
+        = max_element(j.begin(),j.end(),[] (const pair<string,int>& a, const pair<string,int>& b)->bool{ return a.second < b.second; } );
+    cout << best->first << " , " << best->second << "\n";
         return (0);
 
  }
@@ -202,3 +193,4 @@ window.draw(text);
         // fin de la frame courante, affichage de tout ce qu'on a dessiné
         window.display();
     } */
+
