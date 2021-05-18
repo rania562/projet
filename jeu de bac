@@ -6,9 +6,19 @@
 #include<vector>
 #include<map>
 #include<algorithm>
+#include<time.h>
 
 
 using namespace std;
+
+string majus (string mot){
+
+
+                            for (int i=0; i<mot.size() ; i++)
+                                mot[i]=toupper(mot[i]);
+                            return mot;
+                    }
+
 
 
 class player {
@@ -24,14 +34,20 @@ public :
             player (int s=0):score(s)
                     {
 
-                            cout<<"Avant de commencer "<<endl;
+                            cout<<"--------Avant de commencer---------- "<<endl;
                             cout<< "  Entrez votre pseudo nom " << endl;
                             cin >> pseudoname ;
 
                     }
+
+
                     void  verif(char c,string a,string b)
-        {
+                    {
                 string mot;
+                for (int i=0; i<a.size() ; i++)
+                                a[i]=toupper(a[i]);
+
+
                 if (c==a[0])
                         { ifstream dict(b , ios::in);
                         if(!dict)
@@ -40,11 +56,17 @@ public :
                                 }
                         else
                                 {
-                                    while (dict>> mot)
-                                            calcul_score(mot,a);
+                                    while (dict>> mot){
+                                        for (int i=0; i<mot.size() ; i++)
+                                            mot[i]=toupper(mot[i]);
+
+
+                                        calcul_score(mot,a);
+                                        }
                                     dict.close();
                                 }
-                        } }
+                        }
+                }
 
            int  calcul_score(string a,string b)
 
@@ -58,83 +80,179 @@ public :
             ~player(){}
 
         };
+
+bool read_choice( int & N )
+{
+    cout << "Entrez le nombre des joueurs (entre 2 et 7) : " ;
+    while ( ! ( cin >> N ) || N < 2 || N > 7 )
+    {
+        if ( cin.eof() )
+        {
+            // ^D  (^Z sous windows); Fin du flux d'entree !
+            return false;
+        }
+        else if ( cin.fail() )
+        {
+            cout << "Saisie incorrecte, recommencez : ";
+            cin.clear();
+            cin.ignore( numeric_limits<streamsize>::max(), '\n' );
+        }
+        else
+        {
+            cout << "Le chiffre n'est pas entre 1 et 6, recommencez : ";
+        }
+    }
+    return true; // succès
+}
+
 int main() {
 int n;
+clock_t temps;
+clock_t debut;
 char alphabet;
 map<string,int> j;
 string theme;
-cout<<"entrer nombre de joueurs"<<endl;
-cin>>n;
-cout << "Choisir votre theme preferé : /n nature /n sport /n movies /n cuisine /n géneral /n langue /n  " << endl ;
+cout<<"*******Bienvenu au jeu du petit bac********Amusez-vous******** \n \n \n"<<endl;
+cout<<"********Comment jouer?********"<<endl;
+cout<<"Le principe du Jeu du Bac consiste a selectionner une lettre au hasard par la machine et vous devez trouvez, \n pour chacune des 6 catégories proposées, un mot commençant par cette lettre. \n Est declare vainqueur le joueur qui donne le maximum de bonnes réponses en un temps minimum ! \n \n \n"<<endl;
+ read_choice(n);
+
+do{
+cout << "Choisir votre theme prefere : Art - Sport - Nature - Aliments - Culture generale - Langue  " << endl ;
 cin >> theme ;
+for (int i=0; i<theme.size() ; i++)
+       theme[i]=tolower(theme[i]);
+
+}while ((theme!="art") && (theme!="nature") && (theme!="aliments") && (theme!="sport") && (theme!="langue") && (theme!="culture générale"));
+srand(time(NULL)); //La fonction srand initialise le générateur de nombres pseudo-aléatoire
+alphabet= rand() % (90-65+1) + 65;
+cout<<"la lettre choisie est "<<alphabet<<endl;
+
+cout<<"******************************************************** \n  "<<endl;
+
 string * categorie;
 string * reponse;
 categorie=new string[5];
 reponse =new string [5] ;
 if (theme=="sport")
-{ categorie[0]="type de sport";
-  categorie[1]="nom de joeur";
-  categorie[2]="nom d'equipe" ;
-  categorie[3]="nom de competition";
-  categorie[4]="nom d'un entraineur";} ;
+{ categorie[0]="Type de sport";
+  categorie[1]="Nom de joueur";
+  categorie[2]="Nom d'equipe" ;
+  categorie[3]="Nom de competition";
+  categorie[4]="Nom d'un entraineur";} ;
 if (theme=="nature")
-{ categorie[0]="nom d'animal";
-  categorie[1]="nom d'un fruit";
-  categorie[2]="nom de légume" ;
-  categorie[3]="nom de pays";
-  categorie[4]="nom d'un objet";}
-else if (theme=="movies")
-   { categorie[0]="nom d acteur" ;
-     categorie[1]="nom de film" ;
-     categorie[2]="nom de serie" ;
-     categorie[3]="nom d'une actrice";
-     categorie[4]="nom d'un prix";
+{ categorie[0]="Nom d'animal";
+  categorie[1]="Race de chat";
+  categorie[2]="Race de chien" ;
+  categorie[3]="Nom de plante";
+  categorie[4]="Voix d'un animal";}
+else if (theme=="art")
+   { categorie[0]="Nom d'acteur" ;
+     categorie[1]="Nom de serie" ;
+     categorie[2]="Instrument de musique" ;
+     categorie[3]="Nom de film";
+     categorie[4]="Nom de chanteur";
                }
-else if (theme=="cuisine")
-{ categorie[0]="nom d'aliment";
-  categorie[1]="nom de plat";
-  categorie[2]="nom de fruit" ;
-  categorie[3]=" nom de legumes";
-  categorie[4]="nom d'un dessert";}
-else if (theme=="géneral")
-{ categorie[0]="nom d'un metier";
-  categorie[1]="personne célébre ";
-  categorie[2]="nom de voiture" ;
-  categorie[3]="objet";
-  categorie[4]="marque";}
+else if (theme=="aliments")
+{ categorie[0]="Nom de boisson";
+  categorie[1]="Nom de dessert";
+  categorie[2]="Nom de fruit" ;
+  categorie[3]="Nom de legumes";
+  categorie[4]="Nom de fromage";}
+else if (theme=="culture géneral")
+{ categorie[0]="Nom d'un metier";
+  categorie[1]="Nom d'un outil";
+  categorie[2]="Nom du pays" ;
+  categorie[3]="Nom du capitale";
+  categorie[4]="Partie du corps";}
 else if (theme=="langue")
-{ categorie[0]="verbe";
-  categorie[1]="adjectif";
-  categorie[2]="adverbe" ;
-  categorie[3]="prenom";
-  categorie[4]="nom";};
+{ categorie[0]="Verbe";
+  categorie[1]="Qualité-Defaut";
+  categorie[2]="Adverbe" ;
+  categorie[3]="Prenom";
+  categorie[4]="Couleur";};
 
-srand(time(NULL)); //La fonction srand initialise le générateur de nombres pseudo-aléatoire
-alphabet= rand() % (90-65+1) + 65;
-cout<<"la lettre choisie est "<<alphabet<<endl;
+
 
 for (int i=0;i<n;i++)
 {
     player player1;
-
+string ch;
     for (int i=0;i<5;i++)
-        {   cout<<categorie[i]<<endl;
-            cin >>reponse[i];
+        {
+            cout<<categorie[i]<<endl;
+            debut=clock();
+            cin>>ch;
+            temps=clock();
+            if (((temps-debut)/CLOCKS_PER_SEC)<10)
+                reponse[i]=ch;
+            else cout<<"votre reponse ne sera pas enregistrée"<<endl;
         } ;
-    if (theme=="sport")
+    if (theme=="art")
         {
 
-            for(int i=0;i<5;i++)
-                {player1.verif(alphabet,reponse[i],"sport.txt");}; //pour chaque categorie on aura un fichier
-
+            player1.verif(alphabet,reponse[0],"acteur.txt");
+            player1.verif(alphabet,reponse[1],"series.txt");
+            player1.verif(alphabet,reponse[2],"instruments.txt");
+            player1.verif(alphabet,reponse[3],"films.txt");
+            player1.verif(alphabet,reponse[4],"chanteurs.txt");
         }
-    cout<<player1.get_score()<<endl;
+    else if (theme=="sport")
+        {
+
+            player1.verif(alphabet,reponse[0],"sport.txt");
+            player1.verif(alphabet,reponse[1],"joueurs.txt");
+            player1.verif(alphabet,reponse[2],"equipe.txt");
+            player1.verif(alphabet,reponse[3],"competition.txt");
+            player1.verif(alphabet,reponse[4],"entraineurs.txt");
+        }
+    else if (theme=="nature")
+        {
+
+            player1.verif(alphabet,reponse[0],"animaux.txt");
+            player1.verif(alphabet,reponse[1],"racedechats.txt");
+            player1.verif(alphabet,reponse[2],"racedechiens.txt");
+            player1.verif(alphabet,reponse[3],"plante.txt");
+            player1.verif(alphabet,reponse[4],"Cris.txt");
+        }
+    else if (theme=="culture générale")
+        {
+
+            player1.verif(alphabet,reponse[0],"metier.txt");
+            player1.verif(alphabet,reponse[1],"objet.txt");
+            player1.verif(alphabet,reponse[2],"pays.txt");
+            player1.verif(alphabet,reponse[3],"capital.txt");
+            player1.verif(alphabet,reponse[4],"anatomie.txt");
+        }
+    else if (theme=="aliments")
+        {
+
+            player1.verif(alphabet,reponse[0],"boissons.txt");
+            player1.verif(alphabet,reponse[1],"desserts.txt");
+            player1.verif(alphabet,reponse[2],"fruits.txt");
+            player1.verif(alphabet,reponse[3],"legumes.txt");
+            player1.verif(alphabet,reponse[4],"fromage.txt");
+        }
+    else if (theme=="langue")
+        {
+
+            player1.verif(alphabet,reponse[0],"Verbe.txt");
+            player1.verif(alphabet,reponse[1],"QuaDef.txt");
+            player1.verif(alphabet,reponse[2],"adverbe.txt");
+            player1.verif(alphabet,reponse[3],"prenoms.txt");
+            player1.verif(alphabet,reponse[4],"couleur.txt");
+        }
+
+    cout<< " Le score du joueur " << player1.get_nom()<< " est "<< player1.get_score()<<endl;
 
     j[player1.get_nom()]=player1.get_score();
+
 }
+
+cout<<"********Score Final***********"<<endl;
 map<string,int>::iterator best
         = max_element(j.begin(),j.end(),[] (const pair<string,int>& a, const pair<string,int>& b)->bool{ return a.second < b.second; } );
-    cout << best->first << " , " << best->second << "\n";
+    cout << "Le gagnant est "<< best->first << " avec un score  " << best->second << "\n";
         return (0);
 
  }
