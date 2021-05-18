@@ -11,14 +11,6 @@
 
 using namespace std;
 
-string majus (string mot){
-
-
-                            for (int i=0; i<mot.size() ; i++)
-                                mot[i]=toupper(mot[i]);
-                            return mot;
-                    }
-
 
 
 class player {
@@ -41,7 +33,7 @@ public :
                     }
 
 
-                    void  verif(char c,string a,string b)
+            void  verif(char c,string a,string b)
                     {
                 string mot;
                 for (int i=0; i<a.size() ; i++)
@@ -88,7 +80,7 @@ bool read_choice( int & N )
     {
         if ( cin.eof() )
         {
-            // ^D  (^Z sous windows); Fin du flux d'entree !
+       
             return false;
         }
         else if ( cin.fail() )
