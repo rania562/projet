@@ -12,120 +12,116 @@
 using namespace std;
 
 
-
-class player {
+class joueur {
 private :
-            string pseudoname;
+            string nom;
             int score;
 
-            //vector<string> noms;
-            //int nbjoueur;
-            // int * score ; pour le calcul du meilleur score
-
 public :
-            player (int s=0):score(s)
+            joueur (int s=0):score(s)
                     {
 
-                            cout<<"--------Avant de commencer---------- "<<endl;
-                            cout<< "  Entrez votre pseudo nom " << endl;
-                            cin >> pseudoname ;
+                            cout<<"\t \t \t --------------Avant de commencer----------- \n"<<endl;
+                            cout<< " \t \t \t Entrez votre pseudo nom ";
+                            cin >> nom ;
 
                     }
 
 
-            void  verif(char c,string a,string b)
+                    void  verif(char c,string motsaisie,string nomfichier)//methode qui verifie lexistance d'un mot dans un fichier
                     {
-                string mot;
-                for (int i=0; i<a.size() ; i++)
-                                a[i]=toupper(a[i]);
+                string ligne;
+                for (int i=0; i<motsaisie.size() ; i++)
+                                motsaisie[i]=toupper(motsaisie[i]);
 
 
-                if (c==a[0])
-                        { ifstream dict(b , ios::in);
+                if (c==motsaisie[0])
+                        { ifstream dict(nomfichier , ios::in);
                         if(!dict)
                                 {
                                     cout<<"ouverture impossible"<<endl;
                                 }
                         else
                                 {
-                                    while (dict>> mot){
-                                        for (int i=0; i<mot.size() ; i++)
-                                            mot[i]=toupper(mot[i]);
+                                    while (getline(dict,ligne)){
+                                        for (int i=0; i<ligne.size() ; i++)
+                                            ligne[i]=toupper(ligne[i]);
 
 
-                                        calcul_score(mot,a);
+                                        calcul_score(ligne,motsaisie);
                                         }
                                     dict.close();
                                 }
                         }
                 }
 
-           int  calcul_score(string a,string b)
+           int  calcul_score(string mot1,string mot2)
 
                 {
-                            if (a==b)
+                            if (mot1==mot2)
                               {score++;};
                             return (score);}
             int get_score() const
                 { return score;}
-            string get_nom (){return pseudoname;}
-            ~player(){}
+            string get_nom (){return nom;}
+            ~joueur(){}
 
         };
 
-bool read_choice( int & N )
+bool nombre_joueurs( int & n )//fonction qui assure le controle de saisie du nombre des joueurs.
 {
-    cout << "Entrez le nombre des joueurs (entre 2 et 7) : " ;
-    while ( ! ( cin >> N ) || N < 2 || N > 7 )
+    cout << "\t \t \t Entrez le nombre des joueurs (entre 1 et 7) : " ;
+    while ( ! ( cin >> n ) || n < 1 || n > 7 )
     {
+
         if ( cin.eof() )
         {
-       
+            // ^D  (^Z sous windows); Fin du flux d'entree !
             return false;
         }
         else if ( cin.fail() )
         {
-            cout << "Saisie incorrecte, recommencez : ";
+            cout << "\t \t \t Saisie incorrecte, recommencez : ";
             cin.clear();
             cin.ignore( numeric_limits<streamsize>::max(), '\n' );
         }
         else
         {
-            cout << "Le chiffre n'est pas entre 1 et 6, recommencez : ";
+            cout << "\t \t \t Le chiffre n'est pas entre 1 et 7, recommencez : ";
         }
     }
     return true; // succès
 }
 
 int main() {
-int n;
-clock_t temps;
-clock_t debut;
+int n;//nbre de joueurs.
+clock_t temps;//sert a compter le temps necessaire émis pour repondre.
+clock_t debut;//sert a compter le temps necessaire émis pour repondre.
 char alphabet;
-map<string,int> j;
+map<string,int> j;// map a pour cle le nom du joueru et pour valeur son score.
 string theme;
-cout<<"*******Bienvenu au jeu du petit bac********Amusez-vous******** \n \n \n"<<endl;
-cout<<"********Comment jouer?********"<<endl;
-cout<<"Le principe du Jeu du Bac consiste a selectionner une lettre au hasard par la machine et vous devez trouvez, \n pour chacune des 6 catégories proposées, un mot commençant par cette lettre. \n Est declare vainqueur le joueur qui donne le maximum de bonnes réponses en un temps minimum ! \n \n \n"<<endl;
- read_choice(n);
+cout<<"\t \t \t *******Bienvenu au jeu du petit bac********Amusez-vous******** \n \n"<<endl;
+cout<<"\t \t \t \t ****************Comment jouer?**************** \n"<<endl;
+cout<<"Le principe du Jeu du Bac consiste a selectionner une lettre au hasard par la machine et vous devez trouvez, \npour chacune des 6 categories proposees du theme choisi par vous-meme, un mot commençant par cette lettre dans moins de 20 secondes. \nLe vainqueur est celui qui donne le maximum de bonnes réponses en un temps minimum ! \n \n \n"<<endl;
+nombre_joueurs(n);
 
 do{
-cout << "Choisir votre theme prefere : Art - Sport - Nature - Aliments - Culture generale - Langue  " << endl ;
+cout << "\t Choisir votre theme prefere : Art - Sport - Nature - Aliments - Culture generale - Langue : " ;
 cin >> theme ;
-for (int i=0; i<theme.size() ; i++)
+for (int i=0; i<theme.size() ; i++)//pour verifier l'entree correcte de l'un des themes existants
        theme[i]=tolower(theme[i]);
 
-}while ((theme!="art") && (theme!="nature") && (theme!="aliments") && (theme!="sport") && (theme!="langue") && (theme!="culture générale"));
+}while ((theme!="art") && (theme!="nature") && (theme!="aliments") && (theme!="sport") && (theme!="langue") && (theme!="culture"));
+cout<<"\n \n"<<endl;
 srand(time(NULL)); //La fonction srand initialise le générateur de nombres pseudo-aléatoire
 alphabet= rand() % (90-65+1) + 65;
-cout<<"la lettre choisie est "<<alphabet<<endl;
+cout<<"\t \t \t \t la lettre choisie est "<<alphabet<<"\n"<<endl;
 
-cout<<"******************************************************** \n  "<<endl;
+cout<<"\t \t \t ***************************************** \n  "<<endl;
 
-string * categorie;
-string * reponse;
-categorie=new string[5];
-reponse =new string [5] ;
+string categorie[5];
+string reponse[5];
+
 if (theme=="sport")
 { categorie[0]="Type de sport";
   categorie[1]="Nom de joueur";
@@ -151,7 +147,7 @@ else if (theme=="aliments")
   categorie[2]="Nom de fruit" ;
   categorie[3]="Nom de legumes";
   categorie[4]="Nom de fromage";}
-else if (theme=="culture géneral")
+else if (theme=="culture")
 { categorie[0]="Nom d'un metier";
   categorie[1]="Nom d'un outil";
   categorie[2]="Nom du pays" ;
@@ -166,530 +162,85 @@ else if (theme=="langue")
 
 
 
-for (int i=0;i<n;i++)
+for (int i=0;i<n;i++)//pour faire le tour
 {
-    player player1;
+    joueur joueur1;
 string ch;
-    for (int i=0;i<5;i++)
+    for (int i=0;i<5;i++)// chaque joueur doit entrer une reponse dans moins de 20 secondes sinon elle ne sera pas enregistree.
         {
             cout<<categorie[i]<<endl;
-            debut=clock();
+            debut=clock();//debut du temps de saisie
             cin>>ch;
-            temps=clock();
-            if (((temps-debut)/CLOCKS_PER_SEC)<10)
+            temps=clock();//fin du temps de saisie
+            if (((temps-debut)/CLOCKS_PER_SEC)<20)//duree de saisie
                 reponse[i]=ch;
             else cout<<"votre reponse ne sera pas enregistrée"<<endl;
         } ;
     if (theme=="art")
         {
 
-            player1.verif(alphabet,reponse[0],"acteur.txt");
-            player1.verif(alphabet,reponse[1],"series.txt");
-            player1.verif(alphabet,reponse[2],"instruments.txt");
-            player1.verif(alphabet,reponse[3],"films.txt");
-            player1.verif(alphabet,reponse[4],"chanteurs.txt");
+            joueur1.verif(alphabet,reponse[0],"acteur.txt");
+            joueur1.verif(alphabet,reponse[1],"series.txt");
+            joueur1.verif(alphabet,reponse[2],"instruments.txt");
+            joueur1.verif(alphabet,reponse[3],"films.txt");
+            joueur1.verif(alphabet,reponse[4],"chanteurs.txt");
         }
     else if (theme=="sport")
         {
 
-            player1.verif(alphabet,reponse[0],"sport.txt");
-            player1.verif(alphabet,reponse[1],"joueurs.txt");
-            player1.verif(alphabet,reponse[2],"equipe.txt");
-            player1.verif(alphabet,reponse[3],"competition.txt");
-            player1.verif(alphabet,reponse[4],"entraineurs.txt");
+            joueur1.verif(alphabet,reponse[0],"sport.txt");
+            joueur1.verif(alphabet,reponse[1],"joueurs.txt");
+            joueur1.verif(alphabet,reponse[2],"equipe.txt");
+            joueur1.verif(alphabet,reponse[3],"competition.txt");
+            joueur1.verif(alphabet,reponse[4],"entraineurs.txt");
         }
     else if (theme=="nature")
         {
 
-            player1.verif(alphabet,reponse[0],"animaux.txt");
-            player1.verif(alphabet,reponse[1],"racedechats.txt");
-            player1.verif(alphabet,reponse[2],"racedechiens.txt");
-            player1.verif(alphabet,reponse[3],"plante.txt");
-            player1.verif(alphabet,reponse[4],"Cris.txt");
+            joueur1.verif(alphabet,reponse[0],"animaux.txt");
+            joueur1.verif(alphabet,reponse[1],"racedechats.txt");
+            joueur1.verif(alphabet,reponse[2],"racedechiens.txt");
+            joueur1.verif(alphabet,reponse[3],"plante.txt");
+            joueur1.verif(alphabet,reponse[4],"Cris.txt");
         }
-    else if (theme=="culture générale")
+    else if (theme=="culture")
         {
 
-            player1.verif(alphabet,reponse[0],"metier.txt");
-            player1.verif(alphabet,reponse[1],"objet.txt");
-            player1.verif(alphabet,reponse[2],"pays.txt");
-            player1.verif(alphabet,reponse[3],"capital.txt");
-            player1.verif(alphabet,reponse[4],"anatomie.txt");
+            joueur1.verif(alphabet,reponse[0],"metier.txt");
+            joueur1.verif(alphabet,reponse[1],"objet.txt");
+            joueur1.verif(alphabet,reponse[2],"pays.txt");
+            joueur1.verif(alphabet,reponse[3],"capital.txt");
+            joueur1.verif(alphabet,reponse[4],"anatomie.txt");
         }
     else if (theme=="aliments")
         {
 
-            player1.verif(alphabet,reponse[0],"boissons.txt");
-            player1.verif(alphabet,reponse[1],"desserts.txt");
-            player1.verif(alphabet,reponse[2],"fruits.txt");
-            player1.verif(alphabet,reponse[3],"legumes.txt");
-            player1.verif(alphabet,reponse[4],"fromage.txt");
+            joueur1.verif(alphabet,reponse[0],"boissons.txt");
+            joueur1.verif(alphabet,reponse[1],"desserts.txt");
+            joueur1.verif(alphabet,reponse[2],"fruits.txt");
+            joueur1.verif(alphabet,reponse[3],"legumes.txt");
+            joueur1.verif(alphabet,reponse[4],"fromage.txt");
         }
     else if (theme=="langue")
         {
 
-            player1.verif(alphabet,reponse[0],"Verbe.txt");
-            player1.verif(alphabet,reponse[1],"QuaDef.txt");
-            player1.verif(alphabet,reponse[2],"adverbe.txt");
-            player1.verif(alphabet,reponse[3],"prenoms.txt");
-            player1.verif(alphabet,reponse[4],"couleur.txt");
+            joueur1.verif(alphabet,reponse[0],"Verbe.txt");
+            joueur1.verif(alphabet,reponse[1],"QuaDef.txt");
+            joueur1.verif(alphabet,reponse[2],"adverbe.txt");
+            joueur1.verif(alphabet,reponse[3],"prenoms.txt");
+            joueur1.verif(alphabet,reponse[4],"couleur.txt");
         }
 
-    cout<< " Le score du joueur " << player1.get_nom()<< " est "<< player1.get_score()<<endl;
+    cout<< " \t \t \t Le score du joueur " << joueur1.get_nom()<< " est "<< joueur1.get_score()<<"\n \n"<<endl;//affichage du nom et du score de chaque joueur a la fin de son tour
 
-    j[player1.get_nom()]=player1.get_score();
+    j[joueur1.get_nom()]=joueur1.get_score();//remplire la map pour avoir le meilleure score
 
 }
 
-cout<<"********Score Final***********"<<endl;
+cout<<"\t \t \t --------------SCORE FINAL--------------- \n \n "<<endl;
 map<string,int>::iterator best
-        = max_element(j.begin(),j.end(),[] (const pair<string,int>& a, const pair<string,int>& b)->bool{ return a.second < b.second; } );
-    cout << "Le gagnant est "<< best->first << " avec un score  " << best->second << "\n";
+        = max_element(j.begin(),j.end(),[] (const pair<string,int>& a, const pair<string,int>& b)->bool{ return a.second < b.second; } );//La recherche  du meilleur score
+    cout << "\t \t \t Le gagnant est "<< best->first << " avec un score  " << best->second << "\n";
         return (0);
 
  }
-
-
-		/*
-		sf::Renderwindow window (sf::VideoMode(800,600),"jeu du bac",sf::style::Titlebar|sf::style::close|sf::style::Resize);
-		sf Event ev ;
-		//game loop
-		while (window.isOpen())
-		{sf::Text text;
-
-// choix de la police à utiliser
-text.setFont(font); // font est un sf::Font
-
-// choix de la chaîne de caractères à afficher
-text.setString("nouvelle partie");
-
-// choix de la taille des caractères
-text.setCharacterSize(24); // exprimée en pixels, pas en points !
-
-// choix de la couleur du texte
-text.setFillColor(sf::Color::Black);
-
-// choix du style du texte
-text.setStyle(sf::Text::Bold );
-
-...
-
-// puis, dans la boucle de dessin, entre window.clear() et window.display()
-window.draw(text);
-			//event
-			while (Window.pollEvent(ev))
-			{
-		    	switch (event.type)
-    				{
-      					  // fenêtre fermée
-     					   case sf::Event::Closed:
-          					  window.close();
-          					  break;
-
-      				  // touche pressée
-       				 case sf::Event::KeyPressed:
-    					        ...
-         					   break;
-
-        			// on ne traite pas les autres types d'évènements
-     			   default:
-       					    break ;
-    }}
-    window.clear(sf::Color::Black);
-
-        // c'est ici qu'on dessine tout
-        // window.draw(...);
-
-        // fin de la frame courante, affichage de tout ce qu'on a dessiné
-        window.display();
-    } */
-
-/* #include <SFML/Graphics.hpp>
-#include <fstream>
-#include <iostream>
-#include <string>
-#include "TextBox.h"
-using namespace std;
-using namespace sf;
-
-struct scn2
-{
-	bool email = false;
-	bool password = false;
-};
-
-struct scn3
-{
-	bool email = false;
-	bool confirmEmail = false;
-	bool password = false;
-	bool confirmPassword = false;
-};
-
-struct account
-{
-	std::string email;
-	std::string password;
-};
-
-int scene = 1, i = 1;
-scn2 scene2;
-scn3 scene3;
-account acc[100];
-bool first = true;
-
-void input()
-{
-	std::ifstream fin("login.txt", std::ios::in | std::ios::out);
-	while (fin>> acc[i].email)
-	{
-		fin >> acc[i].password;
-		i++;
-	}
-	fin.close();
-}
-
-int main()
-
-{
-
-    RenderWindow window(VideoMode(600, 600), "Jeu du Petit Bac");
-    Texture t, t1, t2, t3, t4, t5, t6, t7, t8, t9;
-    t.loadFromFile("fond.png");
-
-	t1.loadFromFile("Login.png");
-	t2.loadFromFile("Register.png");
-	t3.loadFromFile("Email.png");
-	t4.loadFromFile("Password.png");
-	t5.loadFromFile("Submit.png");
-	t6.loadFromFile("Back.png");
-	t7.loadFromFile("ConfirmEmail.png");
-	t8.loadFromFile("ConfirmPassword.png");
-	t9.loadFromFile("LoginOk.png");
-
-    Sprite tex(t);
-	Sprite login(t1);
-	Sprite registerr(t2);
-	Sprite Email(t3);
-	Sprite Password(t4);
-	Sprite Submit(t5);
-	Sprite Back(t6);
-	Sprite ConfirmEmail(t7);
-	Sprite ConfirmPassword(t8);
-	Sprite LoginOK(t9);
-
-
-    Font arial;
-    arial.loadFromFile("Arial.ttf");
-    /*Text text("Le Petit Bac", arial, 50);
-    text.setColor(Color(0,0,0));
-    text.setPosition(300,30);*/
-
-    Textbox textLoginEmail(30, Color::White, false);
-	textLoginEmail.setFont(arial);
-	Textbox textLoginPassword(30, Color::White, false);
-	textLoginPassword.setFont(arial);
-	Textbox textRegisterEmail(30, Color::White, false);
-	textRegisterEmail.setFont(arial);
-	Textbox textRegisterConfirmEmail(30, Color::White, false);
-	textRegisterConfirmEmail.setFont(arial);
-	Textbox textRegisterPassword(30, Color::White, false);
-	textRegisterPassword.setFont(arial);
-	Textbox textRegisterConfirmPassword(30, Color::White, false);
-	textRegisterConfirmPassword.setFont(arial);
-
-	input();
-
-	std::ofstream fout("login.txt", std::ios::in | std::ios::out);
-
-	while (window.isOpen())
-	{
-		if (first == true)
-		{
-			for (int j = 1; j < i; j++)
-			{
-				fout << acc[j].email << "\n";
-				fout << acc[j].password << "\n";
-			}
-			first = false;
-		}
-		Event e;
-		while (window.pollEvent(e))
-		{
-			if (e.type == Event::Closed)
-			{
-				window.close();
-			}
-			if (e.type == Event::MouseButtonPressed)
-			{
-				if (e.key.code == Mouse::Left)
-				{
-					int x = Mouse::getPosition(window).x;
-					int y = Mouse::getPosition(window).y;
-					if (scene == 1)
-					{
-						if (x >= 75 && x <= 525 && y >= 87 && y <= 257)
-						{
-							// LOGIN
-							scene = 2;
-						}
-						if (x >= 75 && x <= 525 && y >= 343 && y <= 513)
-						{
-							// REGISTER
-							scene = 3;
-						}
-					}
-					if (scene == 2)
-					{
-						// back
-						if(x>=233 && x<=368 && y>=530 && y<=580)
-						{
-							scene = 1;
-						}
-						if (x >= 50 && x <= 200 && y >= 75 && y <= 125)
-						{
-							// click on email
-							scene2.email = true;
-							textLoginEmail.setSelected(true);
-						}
-						if (x >= 50 && x <= 259 && y >= 235 && y <= 285)
-						{
-							//click on password
-							scene2.password = true;
-							textLoginPassword.setSelected(true);
-						}
-						// submit
-						if (x >= 143 && x <= 457 && y >= 405 && y <= 480)
-						{
-
-							std::string e, p;
-							e = textLoginEmail.getText();
-							p = textLoginPassword.getText();
-							if (e.empty() == false && p.empty() == false)
-							{
-								for (int j = 1; j <= i; j++)
-								{
-									if (e == acc[j].email && p == acc[j].password)
-									{
-										scene = 4;
-									}
-								}
-							}
-						}
-					}
-					if (scene == 3)
-					{
-						// back
-						if (x >= 233 && x <= 368 && y >= 530 && y <= 580)
-						{
-							scene = 1;
-						}
-						// email
-						if (x >= 15 && x <= 165 && y >= 34 && y <= 84)
-						{
-							scene3.email = true;
-							textRegisterEmail.setSelected(true);
-						}
-						// confirm email
-						if (x >= 15 && x <= 293 && y >= 116 && y <= 166)
-						{
-							scene3.confirmEmail = true;
-							textRegisterConfirmEmail.setSelected(true);
-						}
-						// password
-						if (x >= 15 && x <= 224 && y >= 198 && y <= 248)
-						{
-							scene3.password = true;
-							textRegisterPassword.setSelected(true);
-						}
-						// confirm password
-						if (x >= 15 && x <= 329 && y >= 280 && y <= 330)
-						{
-							scene3.confirmPassword = true;
-							textRegisterConfirmPassword.setSelected(true);
-						}
-						//submit
-						if (x >= 143 && x <= 457 && y >= 405 && y <= 480)
-						{
-							std::string e, ce, p, cp;
-							e = textRegisterEmail.getText();
-							ce = textRegisterConfirmEmail.getText();
-							p = textRegisterPassword.getText();
-							cp = textRegisterConfirmPassword.getText();
-							if (e.empty() == false && ce.empty() == false && p.empty() == false && cp.empty() == false)
-							{
-								if (e == ce  && p==cp)
-								{
-									fout << e << "\n";
-									fout << p << "\n";
-								}
-							}
-						}
-					}
-				}
-			}
-			if (e.type == Event::TextEntered)
-			{
-				if (scene == 2)
-				{
-					if (scene2.email == true)
-					{
-						if (Keyboard::isKeyPressed(Keyboard::Return))
-						{
-							textLoginEmail.setSelected(false);
-							scene2.email = false;
-						}
-						else
-						{
-							textLoginEmail.typedOn(e);
-						}
-					}
-					else if (scene2.password == true)
-					{
-						if (Keyboard::isKeyPressed(Keyboard::Return))
-						{
-							textLoginPassword.setSelected(false);
-							scene2.password = false;
-						}
-						else
-						{
-							textLoginPassword.typedOn(e);
-						}
-					}
-				}
-				if (scene == 3)
-				{
-					if (scene3.email == true)
-					{
-						if (Keyboard::isKeyPressed(Keyboard::Return))
-						{
-							textRegisterEmail.setSelected(false);
-							scene3.email = false;
-						}
-						else
-						{
-							textRegisterEmail.typedOn(e);
-						}
-					}
-					else if (scene3.confirmEmail == true)
-					{
-						if (Keyboard::isKeyPressed(Keyboard::Return))
-						{
-							textRegisterConfirmEmail.setSelected(false);
-							scene3.confirmEmail = false;
-						}
-						else
-						{
-							textRegisterConfirmEmail.typedOn(e);
-						}
-					}
-					else if (scene3.password == true)
-					{
-						if (Keyboard::isKeyPressed(Keyboard::Return))
-						{
-							textRegisterPassword.setSelected(false);
-							scene3.password = false;
-						}
-						else
-						{
-							textRegisterPassword.typedOn(e);
-						}
-					}
-					else if (scene3.confirmPassword == true)
-					{
-						if (Keyboard::isKeyPressed(Keyboard::Return))
-						{
-							textRegisterConfirmPassword.setSelected(false);
-							scene3.confirmPassword = false;
-						}
-						else
-						{
-							textRegisterConfirmPassword.typedOn(e);
-						}
-					}
-				}
-			}
-		}
-		window.clear(Color(34, 120, 15));
-		if (scene == 1)
-		{
-			login.setPosition(75, 150);
-			window.draw(login);
-			registerr.setPosition(75, 343);
-			window.draw(registerr);
-			window.draw(tex);
-		}
-		if (scene == 2)
-		{
-			Submit.setPosition(143, 405);
-			window.draw(Submit);
-			Password.setPosition(50, 235);
-			window.draw(Password);
-			Email.setPosition(50, 75);
-			window.draw(Email);
-			Back.setPosition(233, 530);
-			window.draw(Back);
-			textLoginEmail.setPosition({ 210,76 });
-			textLoginEmail.drawTo(window);
-			textLoginPassword.setPosition({ 269,237 });
-			textLoginPassword.drawTo(window);
-			window.draw(tex);
-		}
-		if (scene == 3)
-		{
-			Submit.setPosition(143, 405);
-			window.draw(Submit);
-			Back.setPosition(233, 530);
-			window.draw(Back);
-			Email.setPosition(15, 34);
-			window.draw(Email);
-			ConfirmEmail.setPosition(15, 116);
-			window.draw(ConfirmEmail);
-			Password.setPosition(15, 198);
-			window.draw(Password);
-			ConfirmPassword.setPosition(15, 280);
-			window.draw(ConfirmPassword);
-			textRegisterEmail.setPosition({ 175, 35 });
-			textRegisterEmail.drawTo(window);
-			textRegisterConfirmEmail.setPosition({ 303,117 });
-			textRegisterConfirmEmail.drawTo(window);
-			textRegisterPassword.setPosition({ 234,199 });
-			textRegisterPassword.drawTo(window);
-			textRegisterConfirmPassword.setPosition({ 339,281 });
-			textRegisterConfirmPassword.drawTo(window);
-			//window.draw(tex);
-		}
-		if (scene == 4)
-		{
-			LoginOK.setPosition(193, 219);
-			window.draw(LoginOK);
-			window.draw(tex);
-			//Fenetre hedhi bch tabda fiha button fih commencer le jeu
-		}
-		window.display();
-	}
-	return 0;
-}
-
-    /*while (window.isOpen())
-    {
-        // Process events
-        Event event;
-        while (window.pollEvent(event))
-        {
-            // Close window: exit
-            if (event.type == Event::Closed)
-                window.close();
-        }
-
-        // Clear screen
-        window.clear(Color(34,120,15));
-        // Draw the sprite
-       // window.draw(b);
-        // Draw the string
-        window.draw(text);
-        // Update the window
-        window.display();
-    }
-    return 0;
-}*/
