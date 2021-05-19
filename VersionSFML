@@ -1,0 +1,200 @@
+#include <SFML/Graphics.hpp>
+#include <fstream>
+#include <iostream>
+#include <string>
+#include "TextBox.h"
+using namespace std;
+using namespace sf;
+
+
+
+int scene = 1;
+
+
+
+int main()
+
+{
+
+    RenderWindow window(VideoMode(600, 600), "Jeu du Petit Bac");
+
+    Texture t, t1, t2, t3,t31, t4, t5, t6, t7, t8, t9;
+    t.loadFromFile("fond.png");
+
+	t1.loadFromFile("Jouer.png");
+	t2.loadFromFile("Commentjouer.png");
+	t3.loadFromFile("njoue.png");
+	t31.loadFromFile("choix.png");
+	t4.loadFromFile("theme.png");
+	t5.loadFromFile("Suivant.png");
+	t6.loadFromFile("Retour.png");
+	t7.loadFromFile("commencer.png");
+
+    Sprite tex(t);
+	Sprite jouer(t1);
+	Sprite aide(t2);
+	Sprite njoue(t3);
+	Sprite choix(t31);
+	Sprite theme(t4);
+	Sprite Suivant(t5);
+	Sprite Retour(t6);
+	Sprite Commencer(t7);
+
+
+    Font arial;
+    arial.loadFromFile("Arial.ttf");
+
+    srand(time(NULL)); //La fonction srand initialise le générateur de nombres pseudo-aléatoire
+    char alphabet= rand() % (90-65+1) + 65;
+    Text jomla("la lettre choisie est ", arial);
+    jomla.setPosition(50,80);
+    jomla.setColor(Color::Black);
+
+
+
+
+	Textbox choixtheme(30, Color::Red, false);
+	choixtheme.setFont(arial);
+
+    sf::Text erreur("Oups! Saisissez un theme existant svp!", arial);//lors de saisie du theme dans la scene 2
+    erreur.setFillColor(sf::Color(255, 0, 0));
+
+	while (window.isOpen())
+	{
+
+		Event e;
+		while (window.pollEvent(e))
+
+		{
+			if (e.type == Event::Closed)
+			{
+				window.close();
+			}
+
+			if (e.type == Event::MouseButtonPressed)
+			{
+				if (e.key.code == Mouse::Left)
+				{
+					int x = Mouse::getPosition(window).x;
+					int y = Mouse::getPosition(window).y;
+					if (scene == 1)
+					{
+						if (x >= 75 && x <= 525 && y >= 87 && y <= 257)
+						{
+                            //jouer
+							scene = 2;
+						}
+						if (x >= 75 && x <= 525 && y >= 343 && y <= 513)
+						{
+                            //commentjouer
+							scene = 3;
+						}
+					}
+					if (scene == 2)
+					{
+						// retour
+						if(x>=233 && x<=368 && y>=530 && y<=580)
+						{
+							scene = 1;
+						}
+
+
+
+						if (x >= 260 && x <= 350 && y >= 235 && y <= 285)
+						{
+
+							choixtheme.setSelected(true);
+						}
+						// submit
+						if (x >= 143 && x <= 457 && y >= 405 && y <= 480)
+						{ scene = 4;
+
+
+						}
+					}
+					if (scene == 3)
+					{
+						// back
+						if (x >= 233 && x <= 368 && y >= 530 && y <= 580)
+						{
+							scene = 1;
+						}
+
+
+					}
+
+
+				}
+			}
+			if (e.type == Event::TextEntered)
+			{
+				if (scene == 2)
+				{
+
+
+
+						if (Keyboard::isKeyPressed(Keyboard::Return))
+
+							choixtheme.setSelected(false);
+
+						else
+
+							choixtheme.typedOn(e);
+
+
+				}
+
+			}
+		}
+
+		window.clear(sf::Color(146,216,172));
+
+		if (scene == 1)
+		{
+
+			jouer.setPosition(175, 150);
+			window.draw(jouer);
+			aide.setPosition(175, 343);
+			window.draw(aide);
+			window.draw(tex);
+
+		}
+		if (scene == 2)
+		{
+
+			Suivant.setPosition(143, 405);
+			window.draw(Suivant);
+			theme.setPosition(50, 235);
+			window.draw(theme);
+			choix.setPosition(40, 76);
+			window.draw(choix);
+			Retour.setPosition(233, 530);
+			window.draw(Retour);
+
+			choixtheme.setPosition({ 269,237 });
+			choixtheme.drawTo(window);
+			window.draw(tex);
+		}
+		if (scene == 3)
+		{
+
+			Retour.setPosition(233, 530);
+			window.draw(Retour);
+			window.draw(tex);
+
+
+		}
+		if (scene == 4)
+		{
+            window.draw(tex);
+		    window.draw(jomla);
+		    Commencer.setPosition(143,405);
+		    window.draw(Commencer);
+		    Retour.setPosition(233, 530);
+			window.draw(Retour);
+		}
+
+		window.display();
+	}
+	return 0;
+}
